@@ -504,3 +504,12 @@ p#cat {
     font-family: nastliq, serif;
     color: green;
 }
+
+.search {
+    border: 1px dashed grey;
+    text-align: center;
+}
+
+.search .form-control {
+    padding : 8px;
+}

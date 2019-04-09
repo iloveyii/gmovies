@@ -51,7 +51,7 @@ class Cards extends React.Component {
         const { imageloaderReadAction } = this.props;
         this.handleInterval = setInterval( ()=>{
             imageloaderReadAction();
-        }, 3000);
+        }, 30000);
     }
 
     componentDidMount() {
@@ -62,6 +62,14 @@ class Cards extends React.Component {
     render() {
         return (
             <div id="cards">
+                <section>
+                    <div className="search">
+                        <div className="search-input">
+                            <input className="form-control"
+                                   type="search" placeholder="Search topics or keywords" />
+                        </div>
+                    </div>
+                </section>
                 <section>
                     <div className="wrapper">
                         <div className="card">
