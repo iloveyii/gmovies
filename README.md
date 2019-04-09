@@ -66,3 +66,12 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+### Features
+* Feature wise we’ll obviously need a search field and like a table for showing the result
+* It should also have functionality for setting movies as your favourites, maybe with a star symbol in the
+  table.
+* I’d also like a list where you can add movies you want to watch, like the “watch later”
+  functionality on YouTube.
+* Posters and trailers are always nice.

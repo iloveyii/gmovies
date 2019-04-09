@@ -32,11 +32,14 @@ import registerServiceWorker from './serviceWorker';
  */
 import rootSaga from './sagas/rootSaga';
 import SearchReducer from "./reducers/SearchReducer";
+import WatchReducer from "./reducers/WatchReducer";
 
 import {searchReadAction} from "./actions/SearchAction";
+import {watchLaterAction} from "./actions/WatchAction";
 
 const allReducers = combineReducers({
     search: SearchReducer,
+    watch: WatchReducer,
 });
 
 // # 02
@@ -98,6 +101,7 @@ localStorage.setItem('statsUpdate', statsUpdate);
 // Read news
 if(true || ENVIRONMENT.DEV) {
     store.dispatch(searchReadAction('flower'));
+    store.dispatch(watchLaterAction(33997));
 }
 
 /**
