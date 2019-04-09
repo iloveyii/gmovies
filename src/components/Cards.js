@@ -5,18 +5,33 @@ import {withRouter} from "react-router-dom";
 import Card from './Card';
 import {imageloaderReadAction} from "../actions/ImageloaderAction";
 
+import api from '../api/feed';
+
 
 
 class Cards extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { images: [], showLoading: true, stopLabel : 'Stop' };
+        this.state = { images: [], showLoading: true, stopLabel : 'Stop', q : '' };
         this.getData = this.getData.bind(this);
+        this.search = this.search.bind(this);
         this.refresh = this.refresh.bind(this);
         this.stop = this.stop.bind(this);
         this.setTimer = this.setTimer.bind(this);
+        this.textInput = React.createRef();
     }
 
+    search(e) {
+        e.preventDefault();
+        this.setState({ q : this.textInput.current.value });
+        console.log(this.textInput.current.value);
+
+        api.feed.search(this.textInput.current.value).then( res => {
+            console.log(res);
+            this.setState({search : res});
+        });
+
+    }
     getData(nextProps) {
         const { images } = nextProps;
 
@@ -65,8 +80,11 @@ class Cards extends React.Component {
                 <section>
                     <div className="search">
                         <div className="search-input">
-                            <input className="form-control"
-                                   type="search" placeholder="Search topics or keywords" />
+                            <form onSubmit={this.search}>
+                                <input className="form-control"
+                                       type="search" placeholder="Search topics or keywords" ref={this.textInput} />
+                                <button>Submit</button>
+                            </form>
                         </div>
                     </div>
                 </section>

@@ -513,3 +513,7 @@ p#cat {
 .search .form-control {
     padding : 8px;
 }
+
+.search button {
+    padding : 8px;
+}
