@@ -31,12 +31,12 @@ import registerServiceWorker from './serviceWorker';
  * @returns {Array} - every return value is assigned to the corresponding key in allReducers
  */
 import rootSaga from './sagas/rootSaga';
-import ImageloaderReducer from "./reducers/ImageloaderReducer";
+import SearchReducer from "./reducers/SearchReducer";
 
-import {imageloaderReadAction} from "./actions/ImageloaderAction";
+import {searchReadAction} from "./actions/SearchAction";
 
 const allReducers = combineReducers({
-    images: ImageloaderReducer
+    search: SearchReducer,
 });
 
 // # 02
@@ -97,7 +97,7 @@ localStorage.setItem('statsUpdate', statsUpdate);
 
 // Read news
 if(true || ENVIRONMENT.DEV) {
-    store.dispatch(imageloaderReadAction());
+    store.dispatch(searchReadAction('flower'));
 }
 
 /**

@@ -3,10 +3,7 @@ import { connect } from "react-redux";
 import {withRouter} from "react-router-dom";
 
 import Card from './Card';
-import {imageloaderReadAction} from "../actions/ImageloaderAction";
-
-import api from '../api/feed';
-
+import {searchReadAction} from "../actions/SearchAction";
 
 
 class Cards extends React.Component {
@@ -15,63 +12,32 @@ class Cards extends React.Component {
         this.state = { images: [], showLoading: true, stopLabel : 'Stop', q : '' };
         this.getData = this.getData.bind(this);
         this.search = this.search.bind(this);
-        this.refresh = this.refresh.bind(this);
-        this.stop = this.stop.bind(this);
-        this.setTimer = this.setTimer.bind(this);
         this.textInput = React.createRef();
     }
 
     search(e) {
         e.preventDefault();
-        this.setState({ q : this.textInput.current.value });
-        console.log(this.textInput.current.value);
-
-        api.feed.search(this.textInput.current.value).then( res => {
-            console.log(res);
-            this.setState({search : res});
-        });
-
+        const { searchReadAction } = this.props;
+        this.setState({showLoading: true});
+        searchReadAction(this.textInput.current.value);
     }
     getData(nextProps) {
-        const { images } = nextProps;
+        const { search } = nextProps;
 
-        if(images && Array.isArray(images)) {
-            this.setState({images, showLoading: false});
+        if(search && Array.isArray(search.results)) {
+           this.setState({search, showLoading: false});
+           console.log('Inside componentWillReceiveProps search', search);
+           console.log('Inside componentWillReceiveProps test', this.state.search && this.state.search.results.length > 0 && this.state.showLoading === false);
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('Inside componentWillReceiveProps');
+        console.log('Inside componentWillReceiveProps', nextProps);
         this.getData(nextProps);
-    }
-
-    refresh() {
-        const { imageloaderReadAction } = this.props;
-        this.setState({showLoading: true});
-        imageloaderReadAction();
-    }
-    stop() {
-        console.log('Cleared interval');
-        const { imageloaderReadAction } = this.props;
-        if(this.state.stopLabel == 'Stop') {
-            this.setState({stopLabel: 'Start'});
-            clearInterval(this.handleInterval);
-        } else {
-            imageloaderReadAction();
-            this.setState({stopLabel: 'Stop'});
-            this.setTimer();
-        }
-    }
-    setTimer() {
-        const { imageloaderReadAction } = this.props;
-        this.handleInterval = setInterval( ()=>{
-            imageloaderReadAction();
-        }, 30000);
     }
 
     componentDidMount() {
         this.getData(this.props);
-        this.setTimer();
     }
 
     render() {
@@ -88,19 +54,11 @@ class Cards extends React.Component {
                         </div>
                     </div>
                 </section>
-                <section>
-                    <div className="wrapper">
-                        <div className="card">
-                            <button className="btn fifth left" onClick={this.refresh}>Refresh</button>
-                            <button className="btn fifth right" onClick={this.stop}>{this.state.stopLabel}</button>
-                        </div>
-                    </div>
-                </section>
 
                 {
-                    this.state.images && this.state.images.length > 0 && this.state.showLoading === false
+                    this.state.showLoading === false
                         ?
-                        this.state.images.map((image, i) => <Card key={i} image={image}/>)
+                        this.state.search.results.map((image, i) => <Card key={i} image={image}/>)
                         :
                         <div id="loading"></div>
                 }
@@ -115,6 +73,7 @@ class Cards extends React.Component {
  */
 const mapStateToProps = state => ({
     images: state.images,
+    search: state.search,
 });
 
 /**
@@ -122,7 +81,7 @@ const mapStateToProps = state => ({
  * @type {{UserUpdate: UserUpdateAction}}
  */
 const mapActionsToProps = {
-    imageloaderReadAction
+    searchReadAction
 };
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(Cards));

@@ -8,20 +8,19 @@ class Card extends React.Component {
     render() {
         const { image } = this.props;
         return (
-            <section>
-                <div className="wrapper">
-                    <div className="card">
-                        <div className="img">
-                            <img src={image.url} alt="Image" />
-                        </div>
+            <div style={{width: '20%' , float: 'left', overflow: 'hidden'}}>
+                <div className="card">
+                    <div className="img">
+                        <img src={'https://image.tmdb.org/t/p/w94_and_h141_bestv2' + image.poster_path} alt="Image" />
                     </div>
-                    <div className="footer">
-                        <h2>{image.label}</h2>
-                        <hr />
-                    </div>
-                    <div className="clear"></div>
                 </div>
-            </section>
+                <div className="footer">
+                    <h3>{image.original_title}</h3>
+                    <p>{image.overview}</p>
+                    <hr />
+                </div>
+                <div className="clear"></div>
+            </div>
         );
     }
 }
