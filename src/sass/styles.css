@@ -506,14 +506,14 @@ p#cat {
 }
 
 .search {
-    border: 1px dashed grey;
     text-align: center;
 }
 
 .search .form-control {
-    padding : 8px;
+    padding : 18px;
+    font-size: 13px;
 }
 
 .search button {
-    padding : 8px;
+    padding : 18px;
 }

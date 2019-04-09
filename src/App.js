@@ -8,6 +8,7 @@ import About from './components/About';
 import Ni from './components/Ni';
 import Header from './components/Header';
 import './sass/styles.css';
+import './sass/movie.css';
 
 class App extends Component {
 

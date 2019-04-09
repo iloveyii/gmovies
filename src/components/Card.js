@@ -11,14 +11,16 @@ class Card extends React.Component {
         this.favourite = this.favourite.bind(this);
     }
 
-    watchLater() {
+    watchLater(e) {
+        e.preventDefault();
         const { image, watchLaterAction, search} = this.props;
         watchLaterAction(image.id, search);
         console.log('I want to watch later movie with id : ' + image.id);
         this.forceUpdate();
     }
 
-    favourite() {
+    favourite(e) {
+        e.preventDefault();
         const { image } = this.props;
         console.log('I want to add to favourite moview with id : ' + image.id);
     }
@@ -26,26 +28,39 @@ class Card extends React.Component {
     render() {
         const { image } = this.props;
         return (
-            <div style={{width: '20%' , float: 'left', overflow: 'hidden'}}>
-                <div className="card">
-                    <div className="img">
-                        <img src={'https://image.tmdb.org/t/p/w94_and_h141_bestv2' + image.poster_path} alt="Image" />
+            <li>
+                <div className="wrapper">
+                    <div className="info">
+                        <span className="thumb">New</span>
+                        <div className="image">
+                            <a href=""><img src={'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + image.poster_path} alt=""/></a>
+                        </div>
+                        <div className="footer">
+                            <h4>{image.original_title}</h4>
+                            <ul>
+                                <li>
+                                    <a onClick={(e) => this.favourite(e)} href="#">
+                                    {
+                                        (image.favourite && image.favourite === true )
+                                            ? <i className="far fa-calendar-check"></i>
+                                            : <i className="far fa-star"></i>
+                                    }
+                                    </a>
+                                </li>
+                                <li>
+                                    <a onClick={(e)=>this.watchLater(e)} href="#">
+                                    {
+                                        (image.watchLater && image.watchLater === true )
+                                        ? <i className="far fa-calendar-check"></i>
+                                        : <i className="fas fa-clock"></i>
+                                    }
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div className="footer">
-                    <h4>
-                        <button onClick={this.favourite}>Favourite</button>
-                        {
-                            (image.watchLater && image.watchLater === true ) ? <span>X</span> : <button onClick={this.watchLater}>Watch Later</button>
-                        }
-
-                    </h4>
-                    <h3>{image.original_title}</h3>
-                    <p>{image.overview}</p>
-                    <hr />
-                </div>
-                <div className="clear"></div>
-            </div>
+            </li>
         );
     }
 }

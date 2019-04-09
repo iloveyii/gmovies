@@ -55,13 +55,19 @@ class Cards extends React.Component {
                     </div>
                 </section>
 
-                {
-                    this.state.showLoading === false
-                        ?
-                        this.state.search.results.map((image, i) => <Card key={i} image={image}/>)
-                        :
-                        <div id="loading"></div>
-                }
+                <section>
+                    <div className="movies">
+                        <ul>
+                        {
+                            this.state.showLoading === false
+                                ?
+                                this.state.search.results.map((image, i) => <Card key={i} image={image}/>)
+                                :
+                                <div id="loading"></div>
+                        }
+                        </ul>
+                    </div>
+                </section>
             </div>
         )
     }
