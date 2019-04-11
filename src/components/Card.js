@@ -1,5 +1,6 @@
 import React from 'react';
 import {watchLaterAction} from "../actions/WatchAction";
+import {favouriteLaterAction} from "../actions/FavouriteAction";
 import {withRouter} from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -19,22 +20,21 @@ const isImageAccessible = (img) => {
 class Card extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { visible : true };
+        this.state = { visible : false };
         this.watchLater = this.watchLater.bind(this);
         this.favourite = this.favourite.bind(this);
         this.isImageAccessible = this.isImageAccessible.bind(this);
         this.callback = this.callback.bind(this);
     }
 
-    callback(image) {
-        image.accessible = true;
-        this.setState({image});
+    callback() {
+        this.setState({visible : true});
     };
 
     isImageAccessible(img) {
         const url = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + img.poster_path;
         const image = new Image();
-        image.onload = () => this.callback(img);
+        image.onload = () => this.callback();
         image.src = url;
     }
 
@@ -60,16 +60,13 @@ class Card extends React.Component {
         const { image } = this.props;
         this.setState({ image });
         this.isImageAccessible(this.props.image);
-        setTimeout( () => {
-            if(this.state.image.accessible === false) {
-                this.setState({ visible: false});
-            }
-        }, 1000, this);
     }
 
     favourite(e) {
         e.preventDefault();
-        const { image } = this.props;
+        const { image, favouriteLaterAction, search} = this.props;
+        favouriteLaterAction(image.id, search);
+        this.forceUpdate();
         console.log('I want to add to favourite moview with id : ' + image.id);
     }
 
@@ -90,8 +87,8 @@ class Card extends React.Component {
                                 <li>
                                     <a onClick={(e) => this.favourite(e)} href="#">
                                     {
-                                        (image.favourite && image.favourite === true )
-                                            ? <i className="far fa-calendar-check"></i>
+                                        (image.favouriteLater && image.favouriteLater === true )
+                                            ? <i className="fas fa-star"></i>
                                             : <i className="far fa-star"></i>
                                     }
                                     </a>
@@ -120,6 +117,7 @@ class Card extends React.Component {
  */
 const mapStateToProps = state => ({
     watch: state.watch,
+    favourite: state.favourite,
     search: state.search
 });
 
@@ -128,7 +126,8 @@ const mapStateToProps = state => ({
  * @type {{UserUpdate: UserUpdateAction}}
  */
 const mapActionsToProps = {
-    watchLaterAction
+    watchLaterAction,
+    favouriteLaterAction
 };
 
 export default withRouter(connect(mapStateToProps, mapActionsToProps)(Card));

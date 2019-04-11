@@ -12,7 +12,7 @@ const WatchReducer = (state = initState, action = {}) => {
                 const id = search.results.findIndex(movie => movie.id == action.payload.id);
                 if (id !== -1) {
                     console.log('Inside WATCH_LATER Reducer we found id ', id);
-                    search.results[id]['watchLater'] = true;
+                    search.results[id]['watchLater'] = ! search.results[id]['watchLater'];
                 }
             }
             return state;

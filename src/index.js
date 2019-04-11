@@ -36,10 +36,12 @@ import WatchReducer from "./reducers/WatchReducer";
 
 import {searchReadAction} from "./actions/SearchAction";
 import {watchLaterAction} from "./actions/WatchAction";
+import FavouriteReducer from "./reducers/FavouriteReducer";
 
 const allReducers = combineReducers({
     search: SearchReducer,
     watch: WatchReducer,
+    favourite: FavouriteReducer
 });
 
 // # 02
