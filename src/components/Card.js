@@ -27,6 +27,7 @@ class Card extends React.Component {
 
     render() {
         const { image } = this.props;
+
         return (
             <li>
                 <div className="wrapper">

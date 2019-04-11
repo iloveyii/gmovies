@@ -2,41 +2,33 @@ import { SEARCH_READ_SUCCESS, SEARCH_READ_FAIL } from '../types/Search';
 import _ from 'lodash';
 
 const initState = [];
+let validImages = [];
 
-const isImageAccessible = (imgObject) => {
+const callback = (img) => validImages.push(img);
+
+const isImageAccessible = (img) => {
+    const url = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + img.poster_path;
     const image = new Image();
-    image.src = imgObject.url;
-    if(! image.complete) {
-        return false;
-    }
-    if(image.naturalWidth === 0) {
-        return false;
-    }
-    return true;
+    image.onload = () => callback(img);
+    image.src = url;
+    window.validImages = validImages;
 };
-const getImageUrlAndLabel = (imageString) => {
-    let value = imageString.trim();
-    let url;
-    let label;
-    if(value.indexOf(' ') !== -1)  {
-        url = value.substr(0, value.indexOf(' '));
-        label = _.startCase(value.substr(value.indexOf(' ')+1));
-    } else {
-        url = value;
-        label = 'NA';
-    }
 
-    return {
-        url,
-        label
-    }
-};
 
 const SearchReducer = (state = initState, action = {}) => {
     switch (action.type) {
         case SEARCH_READ_SUCCESS:
             console.log('Inside SEARCH_READ_SUCCESS Reducer', action.payload);
-            return action.payload.search;
+
+            const search = Object.assign({}, action.payload.search);
+            if(Array.isArray(action.payload.search.results)) {
+                action.payload.search.results.forEach( (image) => {
+                    isImageAccessible(image);
+                });
+               search.results = validImages;
+            }
+
+            return search;
 
         case SEARCH_READ_FAIL:
             console.log('Inside failed SEARCH_READ_FAIL loader Reducer', action.payload.err);

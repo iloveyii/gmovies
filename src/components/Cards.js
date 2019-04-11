@@ -49,7 +49,7 @@ class Cards extends React.Component {
                             <form onSubmit={this.search}>
                                 <input className="form-control"
                                        type="search" placeholder="Search topics or keywords" ref={this.textInput} />
-                                <button>Submit</button>
+                                <button><i className="fas fa-search"></i></button>
                             </form>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ class Cards extends React.Component {
                         {
                             this.state.showLoading === false
                                 ?
-                                this.state.search.results.map((image, i) => <Card key={i} image={image}/>)
+                                window.validImages.map((image, i) => <Card key={i} image={image}/>)
                                 :
                                 <div id="loading"></div>
                         }
