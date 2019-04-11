@@ -4,11 +4,38 @@ import {withRouter} from "react-router-dom";
 import { connect } from "react-redux";
 
 
+const callback = (img) => {
+    img.accessible = true;
+};
+
+const isImageAccessible = (img) => {
+    img.accessible = false;
+    const url = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + img.poster_path;
+    const image = new Image();
+    image.onload = () => callback(img);
+    image.src = url;
+};
+
 class Card extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { visible : true };
         this.watchLater = this.watchLater.bind(this);
         this.favourite = this.favourite.bind(this);
+        this.isImageAccessible = this.isImageAccessible.bind(this);
+        this.callback = this.callback.bind(this);
+    }
+
+    callback(image) {
+        image.accessible = true;
+        this.setState({image});
+    };
+
+    isImageAccessible(img) {
+        const url = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + img.poster_path;
+        const image = new Image();
+        image.onload = () => this.callback(img);
+        image.src = url;
     }
 
     watchLater(e) {
@@ -17,6 +44,27 @@ class Card extends React.Component {
         watchLaterAction(image.id, search);
         console.log('I want to watch later movie with id : ' + image.id);
         this.forceUpdate();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log('componentWillReceiveProps componentWillReceiveProps');
+        this.setState({image: nextProps.image});
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        console.log('componentWillReceiveProps componentWillUpdate');
+    }
+
+    componentDidMount() {
+        console.log('componentWillReceiveProps componentDidMount');
+        const { image } = this.props;
+        this.setState({ image });
+        this.isImageAccessible(this.props.image);
+        setTimeout( () => {
+            if(this.state.image.accessible === false) {
+                this.setState({ visible: false});
+            }
+        }, 1000, this);
     }
 
     favourite(e) {
@@ -29,15 +77,15 @@ class Card extends React.Component {
         const { image } = this.props;
 
         return (
-            <li>
+            <li style={ {display: this.state.visible ? 'block' : 'none'}}>
                 <div className="wrapper">
                     <div className="info">
-                        <span className="thumb">New</span>
+                        <span className="thumb">New   </span>
                         <div className="image">
                             <a href=""><img src={'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + image.poster_path} alt=""/></a>
                         </div>
                         <div className="footer">
-                            <h4>{image.original_title}</h4>
+                            <h4>{image.original_title.substring(0, 15)}</h4>
                             <ul>
                                 <li>
                                     <a onClick={(e) => this.favourite(e)} href="#">

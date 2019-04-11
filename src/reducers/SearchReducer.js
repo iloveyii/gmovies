@@ -1,32 +1,28 @@
-import { SEARCH_READ_SUCCESS, SEARCH_READ_FAIL } from '../types/Search';
-import _ from 'lodash';
+import {SEARCH_READ_FAIL, SEARCH_READ_SUCCESS} from '../types/Search';
 
 const initState = [];
 let validImages = [];
 
-const callback = (img) => validImages.push(img);
+const callback = (img) => {
+    img.accessible = true;
+};
 
 const isImageAccessible = (img) => {
+    img.accessible = false;
     const url = 'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + img.poster_path;
     const image = new Image();
     image.onload = () => callback(img);
     image.src = url;
-    window.validImages = validImages;
 };
 
 
 const SearchReducer = (state = initState, action = {}) => {
     switch (action.type) {
         case SEARCH_READ_SUCCESS:
-            console.log('Inside SEARCH_READ_SUCCESS Reducer', action.payload);
+            console.log('Inside SEARCH_READ_SUCCESS Reducer', action);
 
             const search = Object.assign({}, action.payload.search);
-            if(Array.isArray(action.payload.search.results)) {
-                action.payload.search.results.forEach( (image) => {
-                    isImageAccessible(image);
-                });
-               search.results = validImages;
-            }
+            search.results.map( img => isImageAccessible(img));
 
             return search;
 
