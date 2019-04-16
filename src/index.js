@@ -102,7 +102,7 @@ localStorage.setItem('statsUpdate', statsUpdate);
 
 // Read news
 if(true || ENVIRONMENT.DEV) {
-    store.dispatch(searchReadAction('flower'));
+    store.dispatch(searchReadAction('flower', 1));
     store.dispatch(watchLaterAction(33997));
 }
 

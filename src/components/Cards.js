@@ -5,21 +5,41 @@ import {withRouter} from "react-router-dom";
 import Card from './Card';
 import {searchReadAction} from "../actions/SearchAction";
 
-
 class Cards extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {images: [], showLoading: true, stopLabel: 'Stop', q: ''};
+        this.state = {images: [], showLoading: true, stopLabel: 'Stop', q: '', search: {total_pages: 0}};
         this.getData = this.getData.bind(this);
         this.search = this.search.bind(this);
         this.textInput = React.createRef();
     }
 
-    search(e) {
+    setFilter(e, filter) {
+        e.preventDefault();
+        const search = Object.assign({},this.props.search );
+        let results = [];
+        if(filter === 'favourite') {
+            results = search.results.filter( (result) => result.favouriteLater === true );
+            search.results = results;
+            this.setState({search});
+            return;
+        }
+
+        if(filter === 'watchLater') {
+            results = search.results.filter( (result) => result.watchLater === true );
+            search.results = results;
+            this.setState({search});
+            return;
+        }
+
+        this.setState({search: this.props.search});
+    }
+
+    search(e, page = 1) {
         e.preventDefault();
         const {searchReadAction} = this.props;
         this.setState({showLoading: true});
-        searchReadAction(this.textInput.current.value);
+        searchReadAction(this.textInput.current.value.length < 1 ? 'flower' : this.textInput.current.value, page);
     }
 
     getData(nextProps) {
@@ -29,7 +49,6 @@ class Cards extends React.Component {
             const results = search.results.filter(result => result.accessible === true);
             this.setState({search, showLoading: false, results});
             console.log('Inside componentWillReceiveProps search', search);
-            console.log('Inside componentWillReceiveProps test', this.state.search && this.state.search.results.length > 0 && this.state.showLoading === false);
         }
     }
 
@@ -49,6 +68,12 @@ class Cards extends React.Component {
             results = this.state.results.filter(result => result.accessible === true);
         }
 
+
+        const N = this.state.search.total_pages > 50 ? 50 : this.state.search.total_pages;
+        const footerPages = Array.apply(null, {length: N}).map(Number.call, Number);
+
+        console.log('Search count pages', this.state.search.total_pages, footerPages);
+
         return (
             <div id="cards">
                 <section>
@@ -60,6 +85,25 @@ class Cards extends React.Component {
                                 <button><i className="fas fa-search"></i></button>
                             </form>
                         </div>
+                    </div>
+                </section>
+
+                <section>
+                    <div style={{marginTop: '20px'}}>
+                        <ul style={{textAlign: 'center'}}>
+                            <li style={{float: 'left', display: 'table'}}><button className="page-button" onClick={(e) => this.setFilter(e, 'favourite') } key="fav">Favourites</button></li>
+                            <li style={{float: 'left', display: 'table'}}><button className="page-button" onClick={(e) => this.setFilter(e, 'watchLater') } key="fav">Watch Later</button></li>
+                            <li style={{float: 'left', display: 'table'}}><button className="page-button" onClick={(e) => this.setFilter(e, 'all') } key="fav">All</button></li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <div style={{marginTop: '20px'}}>
+                        <ul style={{textAlign: 'center'}}>
+                            {
+                                footerPages.map((count, i) => <li style={{float: 'left', display: 'table'}}><button className="page-button" onClick={(e) => {this.search(e, count + 1 ); console.log(i);}} key={i}>{count +1 }</button></li>)
+                            }
+                        </ul>
                     </div>
                 </section>
 
@@ -76,6 +120,8 @@ class Cards extends React.Component {
                         </ul>
                     </div>
                 </section>
+
+
             </div>
         )
     }

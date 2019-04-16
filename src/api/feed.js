@@ -18,8 +18,8 @@
                 throw new Error(error);
                 console.dir(error);
             }),
-        search: (q) =>
-            axios.get(search + 'query=' + q + '&' + api_key ).then(res => {
+        search: (q, page) =>
+            axios.get(search + 'query=' + q + '&page=' + page + '&' + api_key ).then(res => {
                 return res.data;
             }).catch(error => {
                 throw new Error(error);

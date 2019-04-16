@@ -74,7 +74,7 @@ class Card extends React.Component {
         const { image } = this.props;
 
         return (
-            <li style={ {display: this.state.visible ? 'block' : 'none'}}>
+            <li style={ {display: this.state.visible ? 'table-cell' : 'none'}}>
                 <div className="wrapper">
                     <div className="info">
                         <span className="thumb">New   </span>
@@ -82,7 +82,7 @@ class Card extends React.Component {
                             <a href=""><img src={'https://image.tmdb.org/t/p/w185_and_h278_bestv2' + image.poster_path} alt=""/></a>
                         </div>
                         <div className="footer">
-                            <h4>{image.original_title.substring(0, 15)}</h4>
+                            <h4>{image.original_title.substring(0, 12)}</h4>
                             <ul>
                                 <li>
                                     <a onClick={(e) => this.favourite(e)} href="#">

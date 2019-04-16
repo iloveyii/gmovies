@@ -4,7 +4,7 @@ import { searchReadSuccessAction, searchReadFailAction } from "../actions/Search
 
 export function* searchReadSaga(action) {
     try {
-        const resp = yield call(api.feed.search, action.payload.q);
+        const resp = yield call(api.feed.search, action.payload.q, action.payload.page);
 
             console.log('Inside interestingReadSaga', action, resp);
             yield put(searchReadSuccessAction(resp));

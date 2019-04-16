@@ -37,11 +37,10 @@
 
 .movies ul li .wrapper .info .image {
     width: 100%;
+    top: -25px;
+    position: relative;
 }
 
-.movies ul li .wrapper .footer {
-    width: 100%;
-}
 
 .movies ul li .wrapper .thumb {
     background: #cb7a59 none repeat scroll 0 0;
@@ -53,10 +52,11 @@
     line-height: 15px;
     min-width: 55px;
     padding: 4px 10px;
-    position: absolute;
+    position: relative;
     text-align: center;
     text-transform: uppercase;
     z-index: 3;
+    top: -2px;
 }
 
 .movies ul li .wrapper .thumb:after {
